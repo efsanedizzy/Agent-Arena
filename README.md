@@ -1,65 +1,42 @@
-# Agent Arena
+# Agent Arena — Paper Strategy Alpha
 
-Agent Arena is a responsive, single-page **simulation** UI for comparing and backing autonomous portfolio agents intended for a future Robinhood Chain protocol. It does not trade, custody funds, request approvals, or claim an affiliation with Robinhood.
+Agent Arena is a responsive research interface for viewing reference paper strategies alongside live market inputs. It is ready to publish as an **alpha** only.
 
-## Features
+It does **not** execute trades, custody assets, connect wallets, issue a token, accept deposits, manage money, provide investment advice, or present audited performance.
 
-- Deterministic demo-agent performance, allocations, charts, tournament countdown, and leaderboard
-- Search, filters, sorting, agent detail dialogs, responsive mobile navigation, and accessible focus/dialog behavior
-- Demo $ARENA backing flow with duplicate-submit protection, activity records, and `localStorage` persistence
-- Community-agent creation form with inline validation and persisted agents
-- EIP-1193 wallet connection, account/chain listeners, wrong-network state, and a user-initiated Mainnet add-network request
-- Robinhood Chain Mainnet is configured as decimal `4663` / hexadecimal `0x1237`
+## What is live
 
-## Live market feed
+`/api/market` returns current reference prices for ETH, WBTC and USDG via CoinGecko. When `FINNHUB_API_KEY` is set, it also returns TSLA, NVDA and SPY via Finnhub. The browser refreshes this feed every 60 seconds.
 
-When deployed to Vercel, `api/market.js` serves a cached live ETH, WBTC, USDG, TSLA, NVDA, and SPY price feed to the browser. Crypto prices use CoinGecko; stock prices are included only when `FINNHUB_API_KEY` is configured in **Vercel Project Settings → Environment Variables**. Do not place either key in frontend files.
+Agent cards calculate an allocation-weighted 24-hour market change only when every asset in the template has a live price. Seven-day values appear only when the provider supplies enough history. All templates, allocations, labels, and locally-created strategies are illustrative research inputs.
 
-When every asset in an agent's allocation is covered, the card's **24H LIVE** value is a live, allocation-weighted market move. Its 7D/total returns, portfolio value, decisions, backing, and tournaments remain explicitly simulated until there is a verified data model, persisted paper positions, a backend execution service, and audited deployed contracts.
+## Required Vercel variables
 
-## Files
+Create these under **Project Settings → Environment Variables**, set them as **Secret**, and select **Production** (Preview is optional):
 
-- `index.html` — semantic application structure and metadata
-- `styles.css` — responsive terminal/arena visual system
-- `app.js` — configuration, demo data, wallet service, storage, rendering, dialogs, forms, and utilities
-- `contract-config.js` — intentionally-null future contract configuration
-- `contracts/README.md` — future smart-contract architecture and security requirements
+- `COINGECKO_API_KEY` — optional but recommended for a more reliable crypto feed.
+- `FINNHUB_API_KEY` — required for TSLA, NVDA and SPY.
 
-## Run locally
+Never place either key in `app.js`, `index.html`, GitHub, or a `NEXT_PUBLIC_` variable. The example names live in `.env.example` only.
 
-From this folder, start a static web server:
+## Deploy to Vercel
+
+This repository has no build step. Vercel automatically treats `api/market.js` as a serverless endpoint.
+
+1. Upload or push the full project, including `api/market.js`, `app.js`, `styles.css`, `index.html`, and all files in `assets/`.
+2. In Vercel, leave Build Command empty and set Output Directory to the project root (or leave the Vercel default for this static project).
+3. Add the two environment variables above, then redeploy the latest commit.
+4. Visit `https://YOUR-DOMAIN/api/market`. A healthy response contains `source`, `asOf`, and `assets`.
+5. Hard-refresh the homepage and confirm the market panel displays prices rather than “Feed unavailable.”
+
+## Local check
 
 ```bash
 python -m http.server 8080
 ```
 
-Then open <http://localhost:8080>. A static server is recommended: opening with `file://` can cause ES module or fetch behavior differences in future extensions.
+Open `http://localhost:8080`. The live feed needs Vercel because the API function is server-side.
 
-## Wallet and network
+## Publishing boundary
 
-Click **Connect Wallet** to make an `eth_requestAccounts` request through `window.ethereum`. If a compatible wallet is missing, the UI explains that one is needed. The app observes account and chain changes. It never silently switches networks; it can only ask the wallet to add the configured Testnet after the user explicitly requests it (double-click the network status for this MVP control). No private key, seed phrase, signature, transfer, or token approval is requested.
-
-## Demo versus future protocol
-
-All returns, portfolio values, activity, graph points, backing balances, governance weight, and agent decisions are simulation data. The backing workflow is browser-local only and has no monetary value. Asset `contractAddress` values are intentionally absent; add verified addresses from official project documentation before an onchain release.
-
-`contract-config.js` keeps all contract addresses as `null`, which is the signal to remain in Simulation Mode.
-
-## Future AI architecture
-
-Live AI must be implemented behind a server-side API: authenticated service requests, strategy controls, rate limiting, evaluation/audit logs, and guarded execution should live on a backend. Never place OpenAI, RPC-provider, or third-party API keys in browser JavaScript.
-
-## Deployment
-
-This is static HTML/CSS/JS. Upload these files to a static Vercel or Netlify project (or configure the project root as the publish directory). No build command is required. Before deploying, set real verified contract addresses only after contracts are audited and deployed, then replace disabled “Coming Soon” links with actual owned destinations.
-
-## Security notes and limitations
-
-- This MVP uses `localStorage`; clearing browser site data resets simulated data.
-- There is no backend, live pricing, identity system, actual AI execution, smart contract, or real staking.
-- Validate/sanitize any persisted or server-supplied data before production rendering.
-- Do not represent future contracts as audited, secure, or production-ready until they have been independently reviewed.
-
-## Suggested next steps
-
-Build audited contracts, a testnet indexer, verified market/oracle feeds, a backend agent-evaluation service, and formal protocol risk controls before enabling real token or trading flows.
+Keep the visible alpha language and risk disclosure until there is a real backend, persistent strategy records, verified execution logic, legal review, security review, and independently audited contracts. Do not re-enable wallet, token, backing, leaderboard, or performance claims based only on this project.
