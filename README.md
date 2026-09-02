@@ -8,8 +8,14 @@ Agent Arena is a responsive, single-page **simulation** UI for comparing and bac
 - Search, filters, sorting, agent detail dialogs, responsive mobile navigation, and accessible focus/dialog behavior
 - Demo $ARENA backing flow with duplicate-submit protection, activity records, and `localStorage` persistence
 - Community-agent creation form with inline validation and persisted agents
-- EIP-1193 wallet connection, account/chain listeners, wrong-network state, and a Testnet add-network request
-- Robinhood Chain Testnet is configured as decimal `46630` / hexadecimal `0xB626`; mainnet configuration is retained as decimal `4663`
+- EIP-1193 wallet connection, account/chain listeners, wrong-network state, and a user-initiated Mainnet add-network request
+- Robinhood Chain Mainnet is configured as decimal `4663` / hexadecimal `0x1237`
+
+## Live market feed
+
+When deployed to Vercel, `api/market.js` serves a cached live ETH and WBTC price feed to the browser. It fetches data server-side and supports an optional `COINGECKO_API_KEY` configured in **Vercel Project Settings → Environment Variables**. Do not place that key in frontend files.
+
+The live feed is market observation only. Agent performance, portfolio values, decisions, backing, and tournaments remain explicitly simulated until there is a verified data model, a backend execution service, and audited deployed contracts.
 
 ## Files
 
