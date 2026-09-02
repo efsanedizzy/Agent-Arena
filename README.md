@@ -13,9 +13,9 @@ Agent Arena is a responsive, single-page **simulation** UI for comparing and bac
 
 ## Live market feed
 
-When deployed to Vercel, `api/market.js` serves a cached live ETH and WBTC price feed to the browser. It fetches data server-side and supports an optional `COINGECKO_API_KEY` configured in **Vercel Project Settings → Environment Variables**. Do not place that key in frontend files.
+When deployed to Vercel, `api/market.js` serves a cached live ETH, WBTC, USDG, TSLA, NVDA, and SPY price feed to the browser. Crypto prices use CoinGecko; stock prices are included only when `FINNHUB_API_KEY` is configured in **Vercel Project Settings → Environment Variables**. Do not place either key in frontend files.
 
-The live feed is market observation only. Agent performance, portfolio values, decisions, backing, and tournaments remain explicitly simulated until there is a verified data model, a backend execution service, and audited deployed contracts.
+When every asset in an agent's allocation is covered, the card's **24H LIVE** value is a live, allocation-weighted market move. Its 7D/total returns, portfolio value, decisions, backing, and tournaments remain explicitly simulated until there is a verified data model, persisted paper positions, a backend execution service, and audited deployed contracts.
 
 ## Files
 
